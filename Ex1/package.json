@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "@prisma/client": "^5.15.1",
-    "express": "^4.19.2",
-    "passport": "^0.7.0",
-    "prisma": "^5.15.1"
-  }
-}
