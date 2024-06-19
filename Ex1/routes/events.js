@@ -12,5 +12,7 @@ const router = express.Router();
 
 router.get('/', (req, res) => eventController.getEvents(req, res));
 router.get('/:id', (req, res) => eventController.getEventById(req, res));
-
+router.post('/create', (req, res) => eventController.createEvent(req, res));
+router.delete('/:id', (req, res) => eventController.deleteEvent(req, res));
+router.patch('/:id', (req, res) => eventController.updateEvent(req, res));
 module.exports = router;

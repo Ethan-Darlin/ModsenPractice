@@ -1,4 +1,5 @@
 // app.js
+const bodyParser = require('body-parser');
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const eventRoutes = require('./routes/events');
@@ -8,7 +9,7 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
-
+app.use(bodyParser.json());
 // Подключаем маршруты
 app.use('/events', eventRoutes);
 
