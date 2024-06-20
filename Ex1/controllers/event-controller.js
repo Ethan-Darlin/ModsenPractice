@@ -1,6 +1,6 @@
 // controllers/event-controller.js
 const EventsService = require('../services/events-service');
-
+const dtoValidator = require('../validators/dtoValidation');
 class EventController {
     constructor(eventService) {
         this.eventService = eventService;
@@ -21,13 +21,12 @@ class EventController {
     }
     async createEvent(req, res) {
         try {
-            console.log('Request body:', req.body);  // Логировать тело запроса
             const eventData = req.body;
-            console.log('Event data:', eventData);  // Логировать данные события
-            const newEvent = await this.eventService.createEvent(eventData);
+            const validatedEventData = dtoValidator.validateEvent(eventData);
+            const newEvent = await this.eventService.createEvent(validatedEventData);
             res.status(201).json(newEvent);
         } catch (error) {
-            console.error('Error creating event:', error);  // Логировать ошибку
+            console.error('Error creating event:', error);
             res.status(400).json({ error: error.message });
         }
     }
