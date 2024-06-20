@@ -6,9 +6,28 @@ class EventsService {
         this.prisma = prisma;
     }
 
-    async getEvents() {
-        return await this.prisma.event.findMany();
+    async getEvents(searchTerm, sortBy) {
+        let queryOptions = {};
+    
+        if (searchTerm) {
+            queryOptions.where = {
+                OR: [
+                    { title: { contains: searchTerm } },
+                    { description: { contains: searchTerm } },
+                    { tags: { hasSome: searchTerm.split(',') } }
+                ]
+            };
+        }
+    
+        if (sortBy) {
+            // Преобразование строки JSON в объект JavaScript
+            const sortByObject = JSON.parse(sortBy);
+            queryOptions.orderBy = sortByObject;
+        }
+    
+        return await this.prisma.event.findMany(queryOptions);
     }
+    
 
     async getById(id) {
         return await this.prisma.event.findUnique({

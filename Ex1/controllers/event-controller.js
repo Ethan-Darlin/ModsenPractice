@@ -7,9 +7,11 @@ class EventController {
     }
 
     async getEvents(req, res) {
-        const events = await this.eventService.getEvents();
+        const { searchTerm, sortBy } = req.query;
+        const events = await this.eventService.getEvents(searchTerm, sortBy);
         res.json(events);
     }
+    
 
     async getEventById(req, res) {
         const eventId = parseInt(req.params.id);
