@@ -1,4 +1,3 @@
-// routes/events.js
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const EventController = require('../controllers/event-controller');

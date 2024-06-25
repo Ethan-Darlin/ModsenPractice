@@ -1,4 +1,3 @@
-// validators/dtoValidation.js
 const Joi = require('joi');
 
 const eventSchema = Joi.object({

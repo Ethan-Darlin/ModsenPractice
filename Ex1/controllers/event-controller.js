@@ -1,4 +1,3 @@
-// controllers/event-controller.js
 const EventsService = require('../services/events-service');
 const dtoValidator = require('../validators/dtoValidation');
 class EventController {
@@ -7,10 +6,11 @@ class EventController {
     }
 
     async getEvents(req, res) {
-        const { searchTerm, sortBy } = req.query;
-        const events = await this.eventService.getEvents(searchTerm, sortBy);
+        const { searchTerm, sortBy, filterTags, pageSize, pageNumber } = req.query;
+        const events = await this.eventService.getEvents(searchTerm, sortBy, filterTags, pageSize, pageNumber);
         res.json(events);
     }
+    
     
 
     async getEventById(req, res) {

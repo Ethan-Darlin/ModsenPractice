@@ -1,32 +1,44 @@
-
-
-// services/events-service.js
 class EventsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
 
-    async getEvents(searchTerm, sortBy) {
-        let queryOptions = {};
+    async getEvents(searchTerm, sortBy, filterTags, pageSize, pageNumber) {
+        let queryOptions = {
+            where: {} // Инициализация where как пустого объекта
+        };
     
+        // Поиск по названию и описанию
         if (searchTerm) {
-            queryOptions.where = {
-                OR: [
-                    { title: { contains: searchTerm } },
-                    { description: { contains: searchTerm } },
-                    { tags: { hasSome: searchTerm.split(',') } }
-                ]
+            queryOptions.where.OR = [
+                { title: { contains: searchTerm } },
+                { description: { contains: searchTerm } }
+            ];
+        }
+    
+        // Фильтрация по тегам
+        if (filterTags && filterTags.length > 0) {
+            queryOptions.where.tags = {
+                hasSome: filterTags.split(',')
             };
         }
     
+        // Сортировка
         if (sortBy) {
-            // Преобразование строки JSON в объект JavaScript
             const sortByObject = JSON.parse(sortBy);
             queryOptions.orderBy = sortByObject;
         }
     
+        // Пагинация
+        if (pageSize && pageNumber) {
+            queryOptions.skip = (pageNumber - 1) * pageSize;
+            queryOptions.take = parseInt(pageSize, 10);
+        }
+    
         return await this.prisma.event.findMany(queryOptions);
     }
+    
+    
     
 
     async getById(id) {
