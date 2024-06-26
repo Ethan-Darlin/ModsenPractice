@@ -1,7 +1,7 @@
 async function fetchDataFromServers(urls) {
     try {
-        const fetchPromises = urls.map(url => fetch(url));
-        const responses = await Promise.all(fetchPromises);
+        const fetchPromis = urls.map(url => fetch(url));
+        const responses = await Promise.all(fetchPromis);
         const data = await Promise.all(responses.map(response => response.json()));
         return data;
     } catch (error) {
