@@ -4,7 +4,63 @@ class EventController {
     constructor(eventService) {
         this.eventService = eventService;
     }
-
+/**
+ * @swagger
+ * /meetups:
+ *   get:
+ *     summary: Получить список событий
+ *     description: Получить список событий с возможностью фильтрации и сортировки
+ *     parameters:
+ *       - in: query
+ *         name: searchTerm
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: filterTags
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: pageNumber
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Успешный ответ
+ *         content:
+ *           application/json:    
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Событие'
+ * components:
+ *   schemas:
+ *     Событие:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         title:
+ *           type: string
+ *         description:
+ *           type: string
+ *         tags:
+ *           type: array
+ *           items:
+ *             type: string
+ *         eventTime:
+ *           type: string
+ *           format: date-time
+ *         location:
+ *           type: string
+ */
     async getEvents(req, res) {
         const { searchTerm, sortBy, filterTags, pageSize, pageNumber } = req.query;
         const events = await this.eventService.getEvents(searchTerm, sortBy, filterTags, pageSize, pageNumber);

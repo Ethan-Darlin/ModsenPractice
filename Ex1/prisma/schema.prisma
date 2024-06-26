@@ -23,4 +23,5 @@ model User {
   username  String   @unique
   password  String
   refreshToken String? 
+  role     String 
 }
