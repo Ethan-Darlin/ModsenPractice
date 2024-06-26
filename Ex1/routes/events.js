@@ -153,14 +153,12 @@ router.get('/:id', (req, res) => eventController.getEventById(req, res));
 // Маршрут для создания митапа
 router.post('/create', isAdmin, async (req, res) => {
   try {
-    // Проверяем, было ли аннулировано предоставленный токен
     const authHeader = req.headers.authorization;
     const accessToken = authHeader.split(' ')[1];
     if (invalidatedTokens.has(accessToken)) {
       return res.status(403).json({ message: 'Token has been invalidated' });
     }
-
-    // Логика создания митапа
+    //Логика
     const event = await eventController.createEvent(req, res);
     res.status(201).json(event);
   } catch (error) {
@@ -169,10 +167,8 @@ router.post('/create', isAdmin, async (req, res) => {
   }
 });
 
-// Маршрут для редактирования митапа
 router.patch('/:id', isAdmin, (req, res) => eventController.updateEvent(req, res));
 
-// Маршрут для удаления митапа
 router.delete('/:id', isAdmin, (req, res) => eventController.deleteEvent(req, res));
 
 router.post('/register', async (req, res) => {
@@ -180,7 +176,7 @@ router.post('/register', async (req, res) => {
   const userWithTokens = await User.createUser(username, password);
   res.json(userWithTokens); // Возвращаем оба токена
 });
- // Маршрут для входа в систему
+
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findByUsername(username);
@@ -190,7 +186,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
   }
 
-  const accessToken = jwt.sign({ id: user.id, role: user.role }, 'your_jwt_secret', { expiresIn: '1h' }); // Здесь генерируется accessToken
+  const accessToken = jwt.sign({ id: user.id, role: user.role }, 'your_jwt_secret', { expiresIn: '1h' }); 
   const refreshToken = jwt.sign({ id: user.id }, 'your_refresh_token_secret');
   await User.updateRefreshToken(user.id, refreshToken);
 
@@ -200,28 +196,21 @@ router.post('/logout', async (req, res) => {
   try {
     console.log('Black list:', Array.from(invalidatedTokens));
     const { userId } = req.body;
-
-    // Найти пользователя по ID
     const user = await User.findById(userId);
     if (!user) {
       return res.status(401).json({ message: 'User not found' });
     }
-
-    // Получить accessToken из заголовка авторизации
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(403).json({ message: 'No valid token provided' });
     }
     const accessToken = authHeader.split(' ')[1];
 
-    // Добавить accessToken в список аннулированных токенов
     invalidatedTokens.add(accessToken);
     console.log('Black list:', Array.from(invalidatedTokens));
 
-    // Удалить refreshToken из базы данных
     await User.updateRefreshToken(userId, null);
 
-    // Очистить accessToken из заголовков
     res.setHeader('Authorization', '');
 
     res.status(200).json({ message: 'Logout successful' });

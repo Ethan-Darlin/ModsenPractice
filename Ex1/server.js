@@ -13,7 +13,6 @@ const port = 3000;
 app.use(express.json());
 app.use(bodyParser.json());
 
-// Настроим сессию и Passport
 app.use(session({
   secret: 'session_secret',
   resave: false,
@@ -21,11 +20,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-// Подключаем маршруты
 app.use('/meetups', eventRoutes);
-
-// Настройка Swagger
 swaggerSetup(app);
 
 app.listen(port, () => {

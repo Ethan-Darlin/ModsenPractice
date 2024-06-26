@@ -11,7 +11,7 @@ class User {
         username,
         password: hashedPassword,
         role,
-        refreshToken: null, // Инициализируем refreshToken как null
+        refreshToken: null, 
       },
     });
   

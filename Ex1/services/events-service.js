@@ -5,36 +5,27 @@ class EventsService {
 
     async getEvents(searchTerm, sortBy, filterTags, pageSize, pageNumber) {
         let queryOptions = {
-            where: {} // Инициализация where как пустого объекта
+            where: {}
         };
-    
-        // Поиск по названию и описанию
         if (searchTerm) {
             queryOptions.where.OR = [
                 { title: { contains: searchTerm } },
                 { description: { contains: searchTerm } }
             ];
         }
-    
-        // Фильтрация по тегам
         if (filterTags && filterTags.length > 0) {
             queryOptions.where.tags = {
                 hasSome: filterTags.split(',')
             };
         }
-    
-        // Сортировка
         if (sortBy) {
             const sortByObject = JSON.parse(sortBy);
             queryOptions.orderBy = sortByObject;
         }
-    
-        // Пагинация
         if (pageSize && pageNumber) {
             queryOptions.skip = (pageNumber - 1) * pageSize;
             queryOptions.take = parseInt(pageSize, 10);
         }
-    
         return await this.prisma.event.findMany(queryOptions);
     }
     
@@ -74,7 +65,7 @@ class EventsService {
             },
             data: {
                 description: updatedData.description,
-                // late
+                // latte
             }
         });
     }
