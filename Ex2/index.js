@@ -18,7 +18,7 @@ app.get('/bad-request', async (req, res) => {
   try {
       //без 'appid'
       const response = await axios.get('https://api.openweathermap.org/data/2.5/weather?q=London');
-      console.log(response.status); // Это не будет работать, так как 'appid' обязателен
+      console.log(response.status); 
       res.send(`Статус ответа: ${response.status}`);
   } catch (error) {
       console.error(error);
