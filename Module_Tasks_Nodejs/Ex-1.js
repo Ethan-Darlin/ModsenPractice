@@ -1,7 +1,7 @@
 const http = require('http');
 const { performance } = require('perf_hooks');
 
-const urls = ['http://www.google.com', 'http://www.bing.com'];
+const urls = ['http://www.google.com'];
 
 function makeRequest(url, method) {
     return new Promise((resolve, reject) => {
